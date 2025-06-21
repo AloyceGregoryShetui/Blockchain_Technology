@@ -1,3 +1,16 @@
+Program:	MSc. Cybersecurity and Digital Forensic
+Course Name:	Blockchain Technology
+Course Code: 	COG 09212 
+Lecturer:	Dr. Isakwisa Tende
+Assignment:	Build a FabCar blockchain application using Node.js and JavaScript on top of the first-network (test-network) 
+in Hyperledger Fabric for changing ownership of cars.
+Participants:	
+Gabriel Simeo - 24026485811
+Rosemary Masinde - 24026473346
+Gregory  Aloyce  - 24026451607
+Juma, Ismail - 	24026415701
+###############################################################################################################################################################
+
 Setting Up Your Environment First, you need to prepare your computer to run Hyperledger Fabric. This involves installing some tools and software.
 #1. Install Prerequisites 
 #We Run this command in terminal using Linux system (Ubuntu -> 24.04.2) for installs tools like curl (for downloading files), 
