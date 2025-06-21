@@ -1,4 +1,4 @@
-This isting of files and directories within the fabric-samples folder, which contains various Hyperledger Fabric sample projects, tools, and documentation. Confirm its installed.
+This listing of files and directories within the fabric-samples folder, which contains various Hyperledger Fabric sample projects, tools, and documentation. Confirm its installed.
 #:~/fabric-samples$ ls
 asset-transfer-abac            asset-transfer-sbe                builders            config                           LICENSE         test-application        token-erc-20
 asset-transfer-basic           asset-transfer-secured-agreement  CHANGELOG.md        CONTRIBUTING.md                  MAINTAINERS.md  test-network            token-erc-721
