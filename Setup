@@ -1,0 +1,41 @@
+Setting Up Your Environment First, you need to prepare your computer to run Hyperledger Fabric. This involves installing some tools and software.
+#1. Install Prerequisites 
+#We Run this command in terminal using Linux system (Ubuntu -> 24.04.2) for installs tools like curl (for downloading files), 
+git (for version control), docker and docker-compose (for running the network in containers), golang (for Go programming), make 
+(for building software), and jq (for handling JSON data).
+sudo apt install curl git docker.io docker-compose golang make jq -y
+
+#Enable Docker service: Docker is like a virtual machine that runs the blockchain network. 
+Enable and start the Docker service, and add your user to the Docker group so you can run Docker commands without needing sudo every time
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker $USER
+
+#2. Download Fabric Binaries and Samples. This includes the core programs (binaries), Docker images, and sample projects to get you started. 
+Run this command from your home directory
+cd ~ curl -sSL https://bit.ly/HyperledgerFabricInstaller | bash -s -- 2.5.4
+
+#This installs:
+Binaries: peer, orderer, fabric-ca-client, etc.
+Docker images
+Clones: fabric-samples/
+
+#3. Launch the Test Network. Let’s fire up a simple test network to start with. 
+This network will have two organizations (Org1 and Org2) and an orderer (the component that organizes transactions).
+#Navigate to the test network directory:
+cd ~/fabric-samples/test-network
+
+#Start the network (Org1 + Org2 + Orderer): 
+./network.sh up createChannel -c testchannel -ca
+
+#4. Deploy Chaincode Deploying a Smart Contract (Chaincode) In Fabric, We’ll deploy a sample chaincode called asset-transfer-basic, 
+written in Go, to manage assets on the blockchain.
+#To deploy sample asset-transfer-basic chaincode:
+./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c testchannel
+
+#5. Confirm Network and Chaincode Status. To check if the chaincode is installed on your peers (the nodes in Org1 and Org2)
+#Check installed chaincode:
+peer lifecycle chaincode queryinstalled
+
+#Check committed chaincode:
+peer lifecycle chaincode querycommitted --channelID testchannel
