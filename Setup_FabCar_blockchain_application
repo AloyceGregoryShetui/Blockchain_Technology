@@ -1,0 +1,78 @@
+Setting Up Your Environment First, you need to prepare your computer to run Hyperledger Fabric. This involves installing some tools and software.
+#1. Install Prerequisites 
+#We Run this command in terminal using Linux system (Ubuntu -> 24.04.2) for installs tools like curl (for downloading files), 
+git (for version control), docker and docker-compose (for running the network in containers), golang (for Go programming), make 
+(for building software), and jq (for handling JSON data).
+sudo apt install curl git docker.io docker-compose golang make jq -y
+
+#Enable Docker service: Docker is like a virtual machine that runs the blockchain network. 
+#Enable and start the Docker service, and add your user to the Docker group so you can run Docker commands without needing sudo every time
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker $USER
+
+#2. Install Fabric Samples with FabCar. This includes the core programs (binaries), Docker images, and sample projects to get you started. 
+#Run this command from your home directory
+curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
+
+#This installs:
+Binaries: peer, orderer, fabric-ca-client, etc.
+Docker images
+Clones: fabric-samples/
+
+#Install Go (Required for Chaincode)
+sudo apt update && sudo apt install golang-go -y
+echo 'export PATH=$PATH:/usr/lib/go/bin' >> ~/.bashrc
+source ~/.bashrc
+
+#3. Launch the Test Network. Let’s fire up a simple test network to start with. 
+#This network will have two organizations (Org1 and Org2) and an orderer (the component that organizes transactions).
+#Navigate to the test network directory:
+cd ~/fabric-samples-old/fabcar$ 
+
+#Run FabCar Network 
+~/fabric-samples-old/fabcar$ ./startFabric.sh
+
+#4. Interact with JavaScript
+#The output involves navigating to a JavaScript directory, installing Node.js dependencies with npm install, 
+enrolling an admin identity with node enrollAdmin.js, and registering an application user with node registerUser.js for a Hyperledger Fabric application.
+cd javascript
+npm install  # Install dependencies
+#Run node enrollAdmin.js  # Create admin identity
+~/fabric-samples-old/fabcar/javascript$ node enrollAdmin.js
+Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+Successfully enrolled admin user "admin" and imported it into the wallet
+
+#Run node registerUser.js  # Register app user
+~/fabric-samples-old/fabcar/javascript$ node registerUser.js
+Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+Successfully registered and enrolled admin user "appUser" and imported it into the wallet
+
+
+#5. Confirm Network and Chaincode Status. To check if the chaincode is installed on your peers (the nodes in Org1 and Org2)
+#Check installed chaincode:
+peer lifecycle chaincode queryinstalled
+
+#Check committed chaincode:
+peer lifecycle chaincode querycommitted --channelID testchannel
+
+#6. Executing JavaScript Queries and Transactions for Asset Management (FabCar)
+#The output involves running JavaScript scripts in a Hyperledger Fabric application to query all cars (node query.js), 
+add a new car with ID CAR12 (node invoke.js), and verify the addition of CAR12 by querying again (node query.js)
+
+#Run node invoke.js  # Add new car (CAR12)
+~/fabric-samples-old/fabcar/javascript$ node invoke.js
+Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+Transaction has been submitted
+
+#Run node query.js # View all cars
+~/fabric-samples-old/fabcar/javascript$ node query.js
+Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+Transaction has been evaluated, result is: [{"Key":"CAR0","Record":{"make":"Toyota","model":"Prius","colour":"blue","owner":"Tomoko"}},
+{"Key":"CAR1","Record":{"make":"Ford","model":"Mustang","colour":"red","owner":"Brad"}},{"Key":"CAR12","Record":{"make":"Honda","model":"Accord","colour":"Red","owner":"Gregory"}},
+{"Key":"CAR2","Record":{"make":"Hyundai","model":"Tucson","colour":"green","owner":"Jin Soo"}},{"Key":"CAR3","Record":{"make":"Volkswagen","model":"Passat","colour":"yellow","owner":"Max"}},
+{"Key":"CAR4","Record":{"make":"Tesla","model":"S","colour":"black","owner":"Adriana"}},{"Key":"CAR5","Record":{"make":"Peugeot","model":"205","colour":"purple","owner":"Michel"}},
+{"Key":"CAR6","Record":{"make":"Chery","model":"S22L","colour":"white","owner":"Aarav"}},{"Key":"CAR7","Record":{"make":"Fiat","model":"Punto","colour":"violet","owner":"Pari"}},
+{"Key":"CAR8","Record":{"make":"Tata","model":"Nano","colour":"indigo","owner":"Valeria"}},{"Key":"CAR9","Record":{"make":"Holden","model":"Barina","colour":"brown","owner":"Shotaro"}}]
+
+
