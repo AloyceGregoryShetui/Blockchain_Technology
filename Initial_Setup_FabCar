@@ -1,0 +1,22 @@
+#Prerequisites
+#Install dependencies: 
+sudo apt update
+sudo apt install -y docker.io docker-compose golang nodejs npm
+
+# Install Fabric Samples & Binaries
+mkdir ~/fabric-samples && cd ~/fabric-samples
+curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
+export PATH=$PATH:~/fabric-samples/bin
+
+#Start the FabCar Network
+cd ~/fabric-samples/fabcar
+./startFabric.sh
+
+# Interact Using JavaScript
+cd javascript
+npm install                   # Install dependencies
+node enrollAdmin.js           # Create admin identity
+node registerUser.js          # Register app user
+node query.js                 # Query all cars (verify initialization)
+node invoke.js                # Add a new car (CAR12)
+
