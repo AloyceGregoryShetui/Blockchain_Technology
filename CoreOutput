@@ -50,3 +50,22 @@ b8074614488b   hyperledger/fabric-ca:latest                                     
 04d6d1650943   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_org1
 57894637523b   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_orderer
 
+The output displays the version details of the Hyperledger Fabric peer command, including the peer version, 
+commit SHA, Go version, OS architecture, and chaincode-related Docker information.
+#~/fabric-samples/test-network$ peer version
+peer:
+ Version: v2.5.7
+ Commit SHA: 5efcea7
+ Go version: go1.21.9
+ OS/Arch: linux/amd64
+ Chaincode:
+  Base Docker Label: org.hyperledger.fabric
+  Docker Namespace: hyperledger
+
+The output displays the version details of the Hyperledger Fabric orderer command, including the orderer version, commit SHA, Go version, and OS architecture.
+#~/fabric-samples/test-network$ orderer version
+orderer:
+ Version: v2.5.7
+ Commit SHA: 5efcea7
+ Go version: go1.21.9
+ OS/Arch: linux/amd64
