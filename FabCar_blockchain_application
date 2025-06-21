@@ -18,7 +18,7 @@ curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
 #This installs:
 Binaries: peer, orderer, fabric-ca-client, etc.
 Docker images
-Clones: fabric-samples/
+Clones: fabric-samples-old/
 
 #Install Go (Required for Chaincode)
 sudo apt update && sudo apt install golang-go -y
