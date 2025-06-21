@@ -1,0 +1,52 @@
+This isting of files and directories within the fabric-samples folder, which contains various Hyperledger Fabric sample projects, tools, and documentation. Confirm its installed.
+#:~/fabric-samples$ ls
+asset-transfer-abac            asset-transfer-sbe                builders            config                           LICENSE         test-application        token-erc-20
+asset-transfer-basic           asset-transfer-secured-agreement  CHANGELOG.md        CONTRIBUTING.md                  MAINTAINERS.md  test-network            token-erc-721
+asset-transfer-events          auction-dutch                     ci                  full-stack-asset-transfer-guide  off_chain_data  test-network-k8s        token-sdk
+asset-transfer-ledger-queries  auction-simple                    CODE_OF_CONDUCT.md  hardware-security-module         README.md       test-network-nano-bash  token-utxo
+asset-transfer-private-data    bin                               CODEOWNERS          high-throughput                  SECURITY.md     token-erc-1155
+
+The output shows the current state of the fabric-samples repository, 
+including modified and untracked files related to the asset-transfer-basic (FabCar) and test-network directories, as reported by the git status
+#/fabric-samples$ cd ~/fabric-samples && git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   asset-transfer-basic/application-gateway-javascript/package.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	asset-transfer-basic/application-gateway-javascript/public/
+	asset-transfer-basic/application-gateway-javascript/server.js
+	test-network/env-org1.sh
+	test-network/env-org2.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+The output shows the execution of the ./network.sh up command, which starts a Hyperledger Fabric test network using Docker, 
+including peers for Org1 and Org2, an orderer, and details about running containers, along with warnings about obsolete compose file attributes and orphan containers.
+#~/fabric-samples/test-network$ ./network.sh up
+Using docker and docker-compose
+Starting nodes with CLI timeout of '5' tries and CLI delay of '3' seconds and using database 'leveldb' 
+LOCAL_VERSION=v2.5.7
+DOCKER_IMAGE_VERSION=v2.5.7
+WARN[0000] /home/gregory/fabric-samples/test-network/compose/compose-test-net.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] /home/gregory/fabric-samples/test-network/compose/docker/docker-compose-test-net.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] Found orphan containers ([ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+[+] Running 3/3
+ ✔ Container peer0.org1.example.com  Running                                                                                                                                      0.0s 
+ ✔ Container peer0.org2.example.com  Running                                                                                                                                      0.0s 
+ ✔ Container orderer.example.com     Running                                                                                                                                      0.0s 
+CONTAINER ID   IMAGE                                                                                                                                                                    COMMAND                  CREATED        STATUS                     PORTS                                                                                                                             NAMES
+7b710c6767ee   dev-peer0.org2.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3-a612974ebc541e4956d9827f7f9cbb0806e5abac5350cddd0621af729c754380   "docker-entrypoint.s…"   18 hours ago   Up 18 hours                                                                                                                                                  dev-peer0.org2.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3
+57fce90605f4   dev-peer0.org1.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3-448fdf870befabe50c3ebecc2c1f461a4b7df431714a1198235339278118f9d0   "docker-entrypoint.s…"   18 hours ago   Up 18 hours                                                                                                                                                  dev-peer0.org1.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3
+6f2421b5e2b5   hyperledger/fabric-orderer:latest                                                                                                                                        "orderer"                2 weeks ago    Up 18 hours                0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:7053->7053/tcp, :::7053->7053/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp   orderer.example.com
+c2ceebb06b98   hyperledger/fabric-peer:latest                                                                                                                                           "peer node start"        2 weeks ago    Up 18 hours                0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp                                    peer0.org2.example.com
+9f76d2cb6a78   hyperledger/fabric-peer:latest                                                                                                                                           "peer node start"        2 weeks ago    Up 18 hours                0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                                              peer0.org1.example.com
+b8074614488b   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_org2
+04d6d1650943   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_org1
+57894637523b   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_orderer
+
