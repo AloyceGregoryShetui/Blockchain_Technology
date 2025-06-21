@@ -1,58 +1,66 @@
-This listing of files and directories within the fabric-samples folder, which contains various Hyperledger Fabric sample projects, tools, and documentation. Confirm its installed.
-#:~/fabric-samples$ ls
-asset-transfer-abac            asset-transfer-sbe                builders            config                           LICENSE         test-application        token-erc-20
-asset-transfer-basic           asset-transfer-secured-agreement  CHANGELOG.md        CONTRIBUTING.md                  MAINTAINERS.md  test-network            token-erc-721
-asset-transfer-events          auction-dutch                     ci                  full-stack-asset-transfer-guide  off_chain_data  test-network-k8s        token-sdk
-asset-transfer-ledger-queries  auction-simple                    CODE_OF_CONDUCT.md  hardware-security-module         README.md       test-network-nano-bash  token-utxo
-asset-transfer-private-data    bin                               CODEOWNERS          high-throughput                  SECURITY.md     token-erc-1155
+#This listing of files and directories within the fabric-samples folder, which contains various Hyperledger Fabric sample projects, tools, and documentation. Confirm its installed.
+~/fabric-samples-old/fabcar$ ls
+go  java  javascript  networkDown.sh  startFabric.sh  typescript
+gregory@gregory:~/fabric-samples-old/fabcar$ 
+                               CODEOWNERS          high-throughput                  SECURITY.md     token-erc-1155
 
-The output shows the current state of the fabric-samples repository, 
-including modified and untracked files related to the asset-transfer-basic (FabCar) and test-network directories, as reported by the git status
-#/fabric-samples$ cd ~/fabric-samples && git status
-On branch main
-Your branch is up to date with 'origin/main'.
 
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   asset-transfer-basic/application-gateway-javascript/package.json
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	asset-transfer-basic/application-gateway-javascript/public/
-	asset-transfer-basic/application-gateway-javascript/server.js
-	test-network/env-org1.sh
-	test-network/env-org2.sh
-
-no changes added to commit (use "git add" and/or "git commit -a")
-
-The output shows the execution of the ./network.sh up command, which starts a Hyperledger Fabric test network using Docker, 
+#The output shows the execution of the ./network.sh up command, which starts a Hyperledger Fabric test network using Docker, 
 including peers for Org1 and Org2, an orderer, and details about running containers, along with warnings about obsolete compose file attributes and orphan containers.
-#~/fabric-samples/test-network$ ./network.sh up
-Using docker and docker-compose
-Starting nodes with CLI timeout of '5' tries and CLI delay of '3' seconds and using database 'leveldb' 
-LOCAL_VERSION=v2.5.7
-DOCKER_IMAGE_VERSION=v2.5.7
-WARN[0000] /home/gregory/fabric-samples/test-network/compose/compose-test-net.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
-WARN[0000] /home/gregory/fabric-samples/test-network/compose/docker/docker-compose-test-net.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
-WARN[0000] Found orphan containers ([ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
-[+] Running 3/3
- ✔ Container peer0.org1.example.com  Running                                                                                                                                      0.0s 
- ✔ Container peer0.org2.example.com  Running                                                                                                                                      0.0s 
- ✔ Container orderer.example.com     Running                                                                                                                                      0.0s 
-CONTAINER ID   IMAGE                                                                                                                                                                    COMMAND                  CREATED        STATUS                     PORTS                                                                                                                             NAMES
-7b710c6767ee   dev-peer0.org2.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3-a612974ebc541e4956d9827f7f9cbb0806e5abac5350cddd0621af729c754380   "docker-entrypoint.s…"   18 hours ago   Up 18 hours                                                                                                                                                  dev-peer0.org2.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3
-57fce90605f4   dev-peer0.org1.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3-448fdf870befabe50c3ebecc2c1f461a4b7df431714a1198235339278118f9d0   "docker-entrypoint.s…"   18 hours ago   Up 18 hours                                                                                                                                                  dev-peer0.org1.example.com-basic_1.0-df7ecdb1e7a988ffb9698af02689da795224f50be4da03963bf8ac394b0de6e3
-6f2421b5e2b5   hyperledger/fabric-orderer:latest                                                                                                                                        "orderer"                2 weeks ago    Up 18 hours                0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:7053->7053/tcp, :::7053->7053/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp   orderer.example.com
-c2ceebb06b98   hyperledger/fabric-peer:latest                                                                                                                                           "peer node start"        2 weeks ago    Up 18 hours                0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp                                    peer0.org2.example.com
-9f76d2cb6a78   hyperledger/fabric-peer:latest                                                                                                                                           "peer node start"        2 weeks ago    Up 18 hours                0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                                              peer0.org1.example.com
-b8074614488b   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_org2
-04d6d1650943   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_org1
-57894637523b   hyperledger/fabric-ca:latest                                                                                                                                             "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_orderer
+#~/fabric-samples-old/fabcar$ ./startFabric.sh 
+~/fabric-samples-old/test-network ~/fabric-samples-old/fabcar
+Stopping network
+WARN[0000] /home/gregory/fabric-samples-old/test-network/docker/docker-compose-test-net.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] /home/gregory/fabric-samples-old/test-network/docker/docker-compose-couch.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] /home/gregory/fabric-samples-old/test-network/docker/docker-compose-ca.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 13/13
+ ✔ Container orderer.example.com         Removed                                                                                                                                  0.2s 
+ ✔ Container cli                         Removed                                                                                                                                 10.2s 
+ ✔ Container ca_org2                     Removed                                                                                                                                 10.4s 
+ ✔ Container ca_orderer                  Removed                                                                                                                                 10.4s 
+ ✔ Container ca_org1                     Removed                                                                                                                                 10.3s 
+ ✔ Container peer0.org2.example.com      Removed                                                                                                                                  0.5s 
+ ✔ Container peer0.org1.example.com      Removed                                                                                                                                  0.5s 
+ ✔ Container couchdb0                    Removed                                                                                                                                  1.7s 
+ ✔ Container couchdb1                    Removed                                                                                                                                  1.6s 
+ ✔ Volume docker_peer0.org1.example.com  Removed                                                                                                                                  0.0s 
+ ✔ Network fabric_test                   Removed                                                                                                                                  0.2s 
+ ✔ Volume docker_orderer.example.com     Removed                                                                                                                                  0.0s 
+ ✔ Volume docker_peer0.org2.example.com  Removed                                                                                                                                  0.0s 
+Chaincode definition committed on channel 'mychannel'
+Using organization 1
+Querying chaincode definition on peer0.org1 on channel 'mychannel'...
+Attempting to Query committed status on peer0.org1, Retry after 3 seconds.
++ peer lifecycle chaincode querycommitted --channelID mychannel --name fabcar
++ res=0
+Committed chaincode definition for chaincode 'fabcar' on channel 'mychannel':
+Version: 1, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true]
+Query chaincode definition successful on peer0.org1 on channel 'mychannel'
+Using organization 2
+Querying chaincode definition on peer0.org2 on channel 'mychannel'...
+Attempting to Query committed status on peer0.org2, Retry after 3 seconds.
++ peer lifecycle chaincode querycommitted --channelID mychannel --name fabcar
++ res=0
+Committed chaincode definition for chaincode 'fabcar' on channel 'mychannel':
+Version: 1, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true]
+Query chaincode definition successful on peer0.org2 on channel 'mychannel'
+Using organization 1
+Using organization 2
++ fcn_call='{"function":"initLedger","Args":[]}'
++ infoln 'invoke fcn call:{"function":"initLedger","Args":[]}'
++ println '\033[0;34minvoke fcn call:{"function":"initLedger","Args":[]}\033[0m'
++ echo -e '\033[0;34minvoke fcn call:{"function":"initLedger","Args":[]}\033[0m'
+invoke fcn call:{"function":"initLedger","Args":[]}
++ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/gregory/fabric-samples-old/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses localhost:7051 --tlsRootCertFiles /home/gregory/fabric-samples-old/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles /home/gregory/fabric-samples-old/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --isInit -c '{"function":"initLedger","Args":[]}'
++ res=0
+2025-06-21 17:50:22.764 EAT [chaincodeCmd] chaincodeInvokeOrQuery -> INFO 001 Chaincode invoke successful. result: status:200 
+Invoke transaction successful on peer0.org1 peer0.org2 on channel 'mychannel'                                                                                                                                            "sh -c 'fabric-ca-se…"   2 weeks ago    Exited (137) 2 weeks ago                                                                                                                                     ca_orderer
 
-The output displays the version details of the Hyperledger Fabric peer command, including the peer version, 
+
+#The output displays the version details of the Hyperledger Fabric peer command, including the peer version, 
 commit SHA, Go version, OS architecture, and chaincode-related Docker information.
-#~/fabric-samples/test-network$ peer version
+#~/fabric-samples-old/fabcar$ peer version
 peer:
  Version: v2.5.7
  Commit SHA: 5efcea7
@@ -63,7 +71,7 @@ peer:
   Docker Namespace: hyperledger
 
 The output displays the version details of the Hyperledger Fabric orderer command, including the orderer version, commit SHA, Go version, and OS architecture.
-#~/fabric-samples/test-network$ orderer version
+#~/fabric-samples-old/fabcar$ orderer version
 orderer:
  Version: v2.5.7
  Commit SHA: 5efcea7
@@ -71,7 +79,7 @@ orderer:
  OS/Arch: linux/amd64
 
 
-The output from the peer channel list command shows the channels (testchannel and mychannel) that the peer has joined in the Hyperledger Fabric test network.
+#The output from the peer channel list command shows the channels (testchannel and mychannel) that the peer has joined in the Hyperledger Fabric test network.
 #~/fabric-samples/test-network$ peer channel list
 2025-06-21 15:46:54.114 EAT 0001 INFO [channelCmd] InitCmdFactory -> Endorser and orderer connections initialized
 Channels peers has joined: 
