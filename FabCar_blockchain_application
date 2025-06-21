@@ -20,18 +20,71 @@ Binaries: peer, orderer, fabric-ca-client, etc.
 Docker images
 Clones: fabric-samples-old/
 
+#Conffirm peer is installed
+~/fabric-samples-old/fabcar/javascript$ peer version
+peer:
+ Version: 2.2.7
+ Commit SHA: 7f22e997e
+ Go version: go1.18.2
+ OS/Arch: linux/amd64
+ Chaincode:
+  Base Docker Label: org.hyperledger.fabric
+  Docker Namespace: hyperledger
+
+#Conffirm orderer is installed
+~/fabric-samples-old/fabcar/javascript$ orderer version
+orderer:
+ Version: 2.2.7
+ Commit SHA: 7f22e997e
+ Go version: go1.18.2
+ OS/Arch: linux/amd64
+
 #Install Go (Required for Chaincode)
 sudo apt update && sudo apt install golang-go -y
 echo 'export PATH=$PATH:/usr/lib/go/bin' >> ~/.bashrc
 source ~/.bashrc
 
+#Confirm Go is inatalled
+~/fabric-samples-old/fabcar/javascript$ go version
+go version go1.22.2 linux/amd64
+
 #3. Launch the Test Network. Let’s fire up a simple test network to start with. 
 #This network will have two organizations (Org1 and Org2) and an orderer (the component that organizes transactions).
 #Navigate to the test network directory:
 cd ~/fabric-samples-old/fabcar$ 
-
 #Run FabCar Network 
 ~/fabric-samples-old/fabcar$ ./startFabric.sh
+
+#Output when the network is up and running 
+[+] Running 9/9
+ ✔ Volume "docker_peer0.org1.example.com"  Created                                                                                                                                0.0s 
+ ✔ Volume "docker_peer0.org2.example.com"  Created                                                                                                                                0.0s 
+ ✔ Volume "docker_orderer.example.com"     Created                                                                                                                                0.0s 
+ ✔ Container couchdb0                      Started                                                                                                                                7.7s 
+ ✔ Container couchdb1                      Started                                                                                                                                2.6s 
+ ✔ Container orderer.example.com           Started                                                                                                                                2.5s 
+ ✔ Container peer0.org2.example.com        Started                                                                                                                               19.6s 
+ ✔ Container peer0.org1.example.com        Started                                                                                                                               21.1s 
+ ✔ Container cli                           Started                                                                                                                               26.8s 
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                                                                                                NAMES
+509f594a864b   hyperledger/fabric-tools:latest     "/bin/bash"              28 seconds ago   Up 2 seconds                                                                                                         cli
+69c57a3047e1   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 19 seconds   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp       peer0.org2.example.com
+5af81a06ebf4   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 8 seconds    0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                 peer0.org1.example.com
+e7a96bb1ca7c   hyperledger/fabric-orderer:latest   "orderer"                28 seconds ago   Up 26 seconds   0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp                 orderer.example.com
+8b805f9d5502   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 26 seconds   4369/tcp, 9100/tcp, 0.0.0.0:7984->5984/tcp, [::]:7984->5984/tcp                                      couchdb1
+f72313d08350   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 25 seconds   4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp, :::5984->5984/tcp                                        couchdb0
+f74cdae84903   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:8054->8054/tcp, :::8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, :::18054->18054/tcp   ca_org2
+e56bd386c531   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:9054->9054/tcp, :::9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, :::19054->19054/tcp   ca_orderer
+552ba295110f   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:7054->7054/tcp, :::7054->7054/tcp, 0.0.0.0:17054->17054/tcp, :::17054->17054/tcp             ca_org1
+
+#Running Peer Containers for Fabcar Network
+#The output from the docker ps | grep peer command lists the active Docker containers related to peers in the Hyperledger Fabric fabcar network, 
+including chaincode containers for fabcar_1 and peer nodes for Org1 and Org2, along with their ports and statuses.
+~/fabric-samples-old/fabcar$ docker ps | grep peer
+b141e623248c   dev-peer0.org2.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506-587e14d21fc7161ab1e246fbd5583966a3ff292484ddd7a52fa40ade4b60b120   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes                                                                                                        dev-peer0.org2.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506
+69a34eedf124   dev-peer0.org1.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506-5016f400ec9078b1e7c00626e70b0094ec48651ea7f49e14b46a6995345e2431   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes                                                                                                        dev-peer0.org1.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506
+69c57a3047e1   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        6 minutes ago   Up 6 minutes   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp       peer0.org2.example.com
+5af81a06ebf4   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        6 minutes ago   Up 5 minutes   0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                 peer0.org1.example.com
 
 #4. Interact with JavaScript
 #The output involves navigating to a JavaScript directory, installing Node.js dependencies with npm install, 
@@ -48,15 +101,7 @@ Successfully enrolled admin user "admin" and imported it into the wallet
 Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
 Successfully registered and enrolled admin user "appUser" and imported it into the wallet
 
-
-#5. Confirm Network and Chaincode Status. To check if the chaincode is installed on your peers (the nodes in Org1 and Org2)
-#Check installed chaincode:
-peer lifecycle chaincode queryinstalled
-
-#Check committed chaincode:
-peer lifecycle chaincode querycommitted --channelID testchannel
-
-#6. Executing JavaScript Queries and Transactions for Asset Management (FabCar)
+#5. Executing JavaScript Queries and Transactions for Asset Management (FabCar)
 #The output involves running JavaScript scripts in a Hyperledger Fabric application to query all cars (node query.js), 
 add a new car with ID CAR12 (node invoke.js), and verify the addition of CAR12 by querying again (node query.js)
 
