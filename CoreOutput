@@ -83,9 +83,7 @@ orderer:
 #~/fabric-samples/test-network$ peer channel list
 2025-06-21 15:46:54.114 EAT 0001 INFO [channelCmd] InitCmdFactory -> Endorser and orderer connections initialized
 Channels peers has joined: 
-testchannel
 mychannel
-
 
 The output from the peer channel getinfo -c mychannel command provides details about the mychannel channel, 
 including its blockchain height, current block hash, and previous block hash in the Hyperledger Fabric test network.
