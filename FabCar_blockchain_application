@@ -3,134 +3,215 @@ Course Name:	Blockchain Technology
 Course Code: 	COG 09212 
 Lecturer:	Dr. Isakwisa Tende
 Assignment:	Build a FabCar blockchain application using Node.js and JavaScript on top of the first-network (test-network) 
-in Hyperledger Fabric for changing ownership of cars.
+            in Hyperledger Fabric for changing ownership of cars.
 Participants:	
-Gabriel Simeo - 24026485811
+Gabriel C. Simeo - 24026485811
 Rosemary Masinde - 24026473346
 Gregory  Aloyce  - 24026451607
-Juma, Ismail - 	24026415701
+Juma Ismail - 	24026415701
 ###############################################################################################################################################################
 
-Setting Up Your Environment First, you need to prepare your computer to run Hyperledger Fabric. This involves installing some tools and software.
-#1. Install Prerequisites 
-#We Run this command in terminal using Linux system (Ubuntu -> 24.04.2) for installs tools like curl (for downloading files), 
-git (for version control), docker and docker-compose (for running the network in containers), golang (for Go programming), make 
-(for building software), and jq (for handling JSON data).
-sudo apt install curl git docker.io docker-compose golang make jq -y
+This report outlines the setup, configuration and execution of the Hyperledger Fabric FabCar network on an Ubuntu 24.04.2 system. The process includes installing prerequisites, setting up the Fabric environment, launching the test network, and interacting with the FabCar application using JavaScript for asset management.
 
-#Enable Docker service: Docker is like a virtual machine that runs the blockchain network. 
-#Enable and start the Docker service, and add your user to the Docker group so you can run Docker commands without needing sudo every time
-sudo systemctl enable docker
-sudo systemctl start docker
-sudo usermod -aG docker $USER
+-------------------------------------------------------------
 
-#2. Install Fabric Samples with FabCar. This includes the core programs (binaries), Docker images, and sample projects to get you started. 
-#Run this command from your home directory
-curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
+1. Environment Setup
+-------------------
 
-#This installs:
-Binaries: peer, orderer, fabric-ca-client, etc.
-Docker images
-Clones: fabric-samples-old/
+1.1 Install Prerequisites
+To prepare the system for Hyperledger Fabric, essential tools were installed using the following command on an Ubuntu 24.04.2 system:
 
-#Conffirm peer is installed
-~/fabric-samples-old/fabcar/javascript$ peer version
-peer:
- Version: 2.2.7
- Commit SHA: 7f22e997e
- Go version: go1.18.2
- OS/Arch: linux/amd64
- Chaincode:
-  Base Docker Label: org.hyperledger.fabric
-  Docker Namespace: hyperledger
+    sudo apt install curl git docker.io docker-compose golang make jq -y
 
-#Conffirm orderer is installed
-~/fabric-samples-old/fabcar/javascript$ orderer version
-orderer:
- Version: 2.2.7
- Commit SHA: 7f22e997e
- Go version: go1.18.2
- OS/Arch: linux/amd64
+Tools Installed:
+- curl: For downloading files.
+- git: For version control.
+- docker.io and docker-compose: For running the network in containers.
+- golang: For Go programming (used in chaincode).
+- make: For building software.
+- jq: For handling JSON data.
 
-#Install Go (Required for Chaincode)
-sudo apt update && sudo apt install golang-go -y
-echo 'export PATH=$PATH:/usr/lib/go/bin' >> ~/.bashrc
-source ~/.bashrc
+1.2 Configure Docker
+Docker was configured to run the blockchain network in containers. The following commands were executed to enable and start the Docker service and add the user to the Docker group for non-root access:
 
-#Confirm Go is inatalled
-~/fabric-samples-old/fabcar/javascript$ go version
-go version go1.22.2 linux/amd64
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    sudo usermod -aG docker $USER
 
-#3. Launch the Test Network. Let’s fire up a simple test network to start with. 
-#This network will have two organizations (Org1 and Org2) and an orderer (the component that organizes transactions).
-#Navigate to the test network directory:
-cd ~/fabric-samples-old/fabcar$ 
-#Run FabCar Network 
-~/fabric-samples-old/fabcar$ ./startFabric.sh
+1.3 Install Go
+Go was installed to support chaincode development, and the environment was configured to include Go in the system path:
 
-#Output when the network is up and running 
-[+] Running 9/9
- ✔ Volume "docker_peer0.org1.example.com"  Created                                                                                                                                0.0s 
- ✔ Volume "docker_peer0.org2.example.com"  Created                                                                                                                                0.0s 
- ✔ Volume "docker_orderer.example.com"     Created                                                                                                                                0.0s 
- ✔ Container couchdb0                      Started                                                                                                                                7.7s 
- ✔ Container couchdb1                      Started                                                                                                                                2.6s 
- ✔ Container orderer.example.com           Started                                                                                                                                2.5s 
- ✔ Container peer0.org2.example.com        Started                                                                                                                               19.6s 
- ✔ Container peer0.org1.example.com        Started                                                                                                                               21.1s 
- ✔ Container cli                           Started                                                                                                                               26.8s 
-CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                                                                                                NAMES
-509f594a864b   hyperledger/fabric-tools:latest     "/bin/bash"              28 seconds ago   Up 2 seconds                                                                                                         cli
-69c57a3047e1   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 19 seconds   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp       peer0.org2.example.com
-5af81a06ebf4   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 8 seconds    0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                 peer0.org1.example.com
-e7a96bb1ca7c   hyperledger/fabric-orderer:latest   "orderer"                28 seconds ago   Up 26 seconds   0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp                 orderer.example.com
-8b805f9d5502   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 26 seconds   4369/tcp, 9100/tcp, 0.0.0.0:7984->5984/tcp, [::]:7984->5984/tcp                                      couchdb1
-f72313d08350   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 25 seconds   4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp, :::5984->5984/tcp                                        couchdb0
-f74cdae84903   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:8054->8054/tcp, :::8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, :::18054->18054/tcp   ca_org2
-e56bd386c531   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:9054->9054/tcp, :::9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, :::19054->19054/tcp   ca_orderer
-552ba295110f   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:7054->7054/tcp, :::7054->7054/tcp, 0.0.0.0:17054->17054/tcp, :::17054->17054/tcp             ca_org1
+    sudo apt update && sudo apt install golang-go -y
+    echo 'export PATH=$PATH:/usr/lib/go/bin' >> ~/.bashrc
+    source ~/.bashrc
 
-#Running Peer Containers for Fabcar Network
-#The output from the docker ps | grep peer command lists the active Docker containers related to peers in the Hyperledger Fabric fabcar network, 
-including chaincode containers for fabcar_1 and peer nodes for Org1 and Org2, along with their ports and statuses.
-~/fabric-samples-old/fabcar$ docker ps | grep peer
-b141e623248c   dev-peer0.org2.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506-587e14d21fc7161ab1e246fbd5583966a3ff292484ddd7a52fa40ade4b60b120   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes                                                                                                        dev-peer0.org2.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506
-69a34eedf124   dev-peer0.org1.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506-5016f400ec9078b1e7c00626e70b0094ec48651ea7f49e14b46a6995345e2431   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes                                                                                                        dev-peer0.org1.example.com-fabcar_1-762e0fe3dbeee0f7b08fb6200adeb4a3a20f649a00f168c0b3c2257e53b6e506
-69c57a3047e1   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        6 minutes ago   Up 6 minutes   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp       peer0.org2.example.com
-5af81a06ebf4   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        6 minutes ago   Up 5 minutes   0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                 peer0.org1.example.com
+Verification:
+    go version
 
-#4. Interact with JavaScript
-#The output involves navigating to a JavaScript directory, installing Node.js dependencies with npm install, 
-enrolling an admin identity with node enrollAdmin.js, and registering an application user with node registerUser.js for a Hyperledger Fabric application.
-cd javascript
-npm install  # Install dependencies
-#Run node enrollAdmin.js  # Create admin identity
-~/fabric-samples-old/fabcar/javascript$ node enrollAdmin.js
-Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
-Successfully enrolled admin user "admin" and imported it into the wallet
+Output:
+    go version go1.22.2 linux/amd64
 
-#Run node registerUser.js  # Register app user
-~/fabric-samples-old/fabcar/javascript$ node registerUser.js
-Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
-Successfully registered and enrolled admin user "appUser" and imported it into the wallet
+-------------------------------------------------------------
 
-#5. Executing JavaScript Queries and Transactions for Asset Management (FabCar)
-#The output involves running JavaScript scripts in a Hyperledger Fabric application to query all cars (node query.js), 
-add a new car with ID CAR12 (node invoke.js), and verify the addition of CAR12 by querying again (node query.js)
+2. Install Hyperledger Fabric Samples and FabCar
+-----------------------------------------------
 
-#Run node invoke.js  # Add new car (CAR12)
-~/fabric-samples-old/fabcar/javascript$ node invoke.js
-Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
-Transaction has been submitted
+The Fabric samples, including the FabCar application, were installed using the provided script. From the home directory, the following command was executed:
 
-#Run node query.js # View all cars
-~/fabric-samples-old/fabcar/javascript$ node query.js
-Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
-Transaction has been evaluated, result is: [{"Key":"CAR0","Record":{"make":"Toyota","model":"Prius","colour":"blue","owner":"Tomoko"}},
-{"Key":"CAR1","Record":{"make":"Ford","model":"Mustang","colour":"red","owner":"Brad"}},{"Key":"CAR12","Record":{"make":"Honda","model":"Accord","colour":"Red","owner":"Gregory"}},
-{"Key":"CAR2","Record":{"make":"Hyundai","model":"Tucson","colour":"green","owner":"Jin Soo"}},{"Key":"CAR3","Record":{"make":"Volkswagen","model":"Passat","colour":"yellow","owner":"Max"}},
-{"Key":"CAR4","Record":{"make":"Tesla","model":"S","colour":"black","owner":"Adriana"}},{"Key":"CAR5","Record":{"make":"Peugeot","model":"205","colour":"purple","owner":"Michel"}},
-{"Key":"CAR6","Record":{"make":"Chery","model":"S22L","colour":"white","owner":"Aarav"}},{"Key":"CAR7","Record":{"make":"Fiat","model":"Punto","colour":"violet","owner":"Pari"}},
-{"Key":"CAR8","Record":{"make":"Tata","model":"Nano","colour":"indigo","owner":"Valeria"}},{"Key":"CAR9","Record":{"make":"Holden","model":"Barina","colour":"brown","owner":"Shotaro"}}]
+    curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
 
+This command installed:
+- Binaries: peer, orderer, fabric-ca-client, etc.
+- Docker Images: For running the Fabric network.
+- Fabric Samples Repository: Cloned into ~/fabric-samples-old/.
 
+Verification of Installed Components
+- Peer Binary:
+      ~/fabric-samples-old/fabcar/javascript$ peer version
+
+  Output:
+      peer:
+       Version: 2.2.7
+       Commit SHA: 7f22e997e
+       Go version: go1.18.2
+       OS/Arch: linux/amd64
+       Chaincode:
+        Base Docker Label: org.hyperledger.fabric
+        Docker Namespace: hyperledger
+
+- Orderer Binary:
+      ~/fabric-samples-old/fabcar/javascript$ orderer version
+
+  Output:
+      orderer:
+       Version: 2.2.7
+       Commit SHA: 7f22e997e
+       Go version: go1.18.2
+       OS/Arch: linux/amd64
+
+-------------------------------------------------------------
+
+3. Launch the FabCar Test Network
+--------------------------------
+
+The FabCar test network, consisting of two organizations (Org1 and Org2) and an orderer, was launched from the test network directory:
+
+    cd ~/fabric-samples-old/fabcar
+    ./startFabric.sh
+
+Network Startup Output
+The network started successfully, creating Docker volumes and containers for the Fabric components:
+
+    [+] Running 9/9
+     ✔ Volume "docker_peer0.org1.example.com"  Created  0.0s 
+     ✔ Volume "docker_peer0.org2.example.com"  Created  0.0s 
+     ✔ Volume "docker_orderer.example.com"     Created  0.0s 
+     ✔ Container couchdb0                      Started  7.7s 
+     ✔ Container couchdb1                      Started  2.6s 
+     ✔ Container orderer.example.com           Started  2.5s 
+     ✔ Container peer0.org2.example.com        Started  19.6s 
+     ✔ Container peer0.org1.example.com        Started  21.1s 
+     ✔ Container cli                           Started  26.8s 
+
+Docker Container Details:
+    CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                                                                                                NAMES
+    509f594a864b   hyperledger/fabric-tools:latest     "/bin/bash"              28 seconds ago   Up 2 seconds                                                                                                         cli
+    69c57a3047e1   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 19 seconds   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp       peer0.org2.example.com
+    5af81a06ebf4   hyperledger/fabric-peer:latest      "peer node start"        28 seconds ago   Up 8 seconds    0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp                 peer0.org1.example.com
+    e7a96bb1ca7c   hyperledger/fabric-orderer:latest   "orderer"                28 seconds ago   Up 26 seconds   0.0.0.0:7050->7050/tcp, :::7050->7050/tcp, 0.0.0.0:9443->9443/tcp, :::9443->9443/tcp                 orderer.example.com
+    8b805f9d5502   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 26 seconds   4369/tcp, 9100/tcp, 0.0.0.0:7984->5984/tcp, [::]:7984->5984/tcp                                      couchdb1
+    f72313d08350   couchdb:3.1.1                       "tini -- /docker-ent…"   28 seconds ago   Up 25 seconds   4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp, :::5984->5984/tcp                                        couchdb0
+    f74cdae84903   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:8054->8054/tcp, :::8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, :::18054->18054/tcp   ca_org2
+    e56bd386c531   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:9054->9054/tcp, :::9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, :::19054->19054/tcp   ca_orderer
+    552ba295110f   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   38 seconds ago   Up 36 seconds   0.0.0.0:7054->7054/tcp, :::7054->7054/tcp, 0.0.0.0:17054->17054/tcp, :::17054->17054/tcp             ca_org1
+
+Active Peer Containers
+The active peer containers, including chaincode containers for fabcar_1 and peer nodes for Org1 and Org2, were verified:
+
+    docker ps | grep peer
+
+Output:
+    b141e623248c   dev-peer0.org2.example.com-fabcar_1-...   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes   dev-peer0.org2.example.com-fabcar_1-...
+    69a34eedf124   dev-peer0.org1.example.com-fabcar_1-...   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes   dev-peer0.org1.example.com-fabcar_1-...
+    69c57a3047e1   hyperledger/fabric-peer:latest             "peer node start"        6 minutes ago   Up 6 minutes   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp   peer0.org2.example.com
+    5af81a06ebf4   hyperledger/fabric-peer:latest             "peer node start"        6 minutes ago   Up 5 minutes   0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp   peer0.org1.example.com
+
+-------------------------------------------------------------
+
+4. Interact with FabCar Application (JavaScript)
+-----------------------------------------------
+
+The FabCar application was interacted with using JavaScript scripts to manage identities and perform transactions.
+
+4.1 Install Dependencies
+Navigated to the JavaScript directory and installed Node.js dependencies:
+
+    cd ~/fabric-samples-old/fabcar/javascript
+    npm install
+
+4.2 Enroll Admin Identity
+An admin identity was created for the network:
+
+    node enrollAdmin.js
+
+Output:
+    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Successfully enrolled admin user "admin" and imported it into the wallet
+
+4.3 Register Application User
+An application user (appUser) was registered and enrolled:
+
+    node registerUser.js
+
+Output:
+    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Successfully registered and enrolled admin user "appUser" and imported it into the wallet
+
+-------------------------------------------------------------
+
+5. Asset Management with FabCar
+------------------------------
+
+The FabCar chaincode was used to manage car assets on the blockchain by executing queries and transactions.
+
+5.1 Add a New Car (CAR12)
+A new car with ID CAR12 was added to the ledger:
+
+    node invoke.js
+
+Output:
+    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Transaction has been submitted
+
+5.2 Query All Cars
+The ledger was queried to list all cars, confirming the addition of CAR12:
+
+    node query.js
+
+Output:
+    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Transaction has been evaluated, result is: [
+      {"Key":"CAR0","Record":{"make":"Toyota","model":"Prius","colour":"blue","owner":"Tomoko"}},
+      {"Key":"CAR1","Record":{"make":"Ford","model":"Mustang","colour":"red","owner":"Brad"}},
+      {"Key":"CAR12","Record":{"make":"Honda","model":"Accord","colour":"Red","owner":"Gregory"}},
+      {"Key":"CAR2","Record":{"make":"Hyundai","model":"Tucson","colour":"green","owner":"Jin Soo"}},
+      {"Key":"CAR3","Record":{"make":"Volkswagen","model":"Passat","colour":"yellow","owner":"Max"}},
+      {"Key":"CAR4","Record":{"make":"Tesla","model":"S","colour":"black","owner":"Adriana"}},
+      {"Key":"CAR5","Record":{"make":"Peugeot","model":"205","colour":"purple","owner":"Michel"}},
+      {"Key":"CAR6","Record":{"make":"Chery","model":"S22L","colour":"white","owner":"Aarav"}},
+      {"Key":"CAR7","Record":{"make":"Fiat","model":"Punto","colour":"violet","owner":"Pari"}},
+      {"Key":"CAR8","Record":{"make":"Tata","model":"Nano","colour":"indigo","owner":"Valeria"}},
+      {"Key":"CAR9","Record":{"make":"Holden","model":"Barina","colour":"brown","owner":"Shotaro"}}
+    ]
+
+-------------------------------------------------------------
+
+6. Conclusion
+-------------
+
+The Hyperledger Fabric FabCar network was successfully set up and operated on an Ubuntu 24.04.2 system. All prerequisites, including Docker, Go, and Fabric binaries, were installed and verified. The test network was launched, creating a functional blockchain environment with two organizations and an orderer. The FabCar application was used to enroll identities, register users, add a new car (CAR12), and query the ledger, confirming the successful execution of transactions and queries. This setup demonstrates a fully operational Hyperledger Fabric environment for asset management using the FabCar chaincode.
+
+------------------------------------------------------------- 
+
+Date: June 15, 2025  
+Environment: Ubuntu 24.04.2, Hyperledger Fabric 2.2.7, Fabric CA 1.5.7
