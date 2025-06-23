@@ -1,0 +1,76 @@
+
+Hyperledger Fabric + FabCar
+===========================
+
+1. Start the test network
+-------------------------
+cd ~/fabric-samples-old/test-network
+./network.sh up
+
+2. Create a channel
+-------------------
+./network.sh createChannel
+# or for a specific name
+./network.sh createChannel -c mychannel
+
+3. Deploy FabCar chaincode
+--------------------------
+./network.sh deployCC -ccn fabcar -ccp ../fabcar/chaincode-go -ccl go
+# or JavaScript version
+./network.sh deployCC -ccn fabcar -ccp ../fabcar/chaincode-javascript -ccl javascript
+
+4. Enroll Admin and Register User
+---------------------------------
+cd ~/fabric-samples-old/fabcar/javascript
+node enrollAdmin.js
+node registerUser.js
+
+5. Start API Backend Server
+---------------------------
+cd ~/fabric-samples-old/fabcar/javascript/api
+node server.js
+
+# Expected:
+# ✅ FabCar API is running at http://localhost:4000
+
+6. REST API Commands (using curl or Postman)
+--------------------------------------------
+
+Register user:
+--------------
+curl -X POST http://localhost:4000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"gregoryUser"}'
+
+Query all cars:
+---------------
+curl http://localhost:4000/cars
+
+Create a car:
+-------------
+curl -X POST http://localhost:4000/createCar \
+  -H "Content-Type: application/json" \
+  -d '{"carId":"CAR10","make":"Subaru","model":"Outback","colour":"silver","owner":"Gregory"}'
+
+Change car owner:
+-----------------
+curl -X POST http://localhost:4000/changeOwner \
+  -H "Content-Type: application/json" \
+  -d '{"carId":"CAR10","newOwner":"Alice"}'
+
+7. Create Frontend (React + Vite)
+---------------------------------
+npm create vite@latest fabcar-frontend -- --template react
+cd fabcar-frontend
+npm install
+npm run dev
+
+# Vite homepage should show successfully.
+
+Summary
+-------
+✅ Fabric network up
+✅ FabCar chaincode deployed
+✅ API backend built and running
+✅ React frontend setup and working
+✅ Commands for create, query, update (change ownership) tested successfully
