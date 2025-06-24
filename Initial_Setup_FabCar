@@ -8,11 +8,11 @@ mkdir ~/fabric-samples && cd ~/fabric-samples
 curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.7 1.5.7
 export PATH=$PATH:~/fabric-samples/bin
 
-#Start the FabCar Network
+#Starts the FabCar Network
 cd ~/fabric-samples/fabcar
 ./startFabric.sh
 
-# Interact Using JavaScript
+# Interacts Using JavaScript
 cd javascript
 npm install                   # Install dependencies
 node enrollAdmin.js           # Create admin identity
