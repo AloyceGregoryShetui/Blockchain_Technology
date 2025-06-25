@@ -33,7 +33,7 @@ Tools Installed:
 
 1.2 Configure Docker
 Docker was configured to run the blockchain network in containers. The following commands were executed to enable and start the Docker service and add the user to the Docker group for non-root access:
-
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     sudo systemctl enable docker
     sudo systemctl start docker
     sudo usermod -aG docker $USER
