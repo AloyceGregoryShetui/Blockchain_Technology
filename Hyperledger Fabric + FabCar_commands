@@ -4,8 +4,8 @@ Hyperledger Fabric + FabCar
 
 1. Start the test network
 -------------------------
-cd ~/fabric-samples-old/test-network
-./network.sh up
+/fabric-install/fabric-samples/fabcar$ ./startFabric.sh 
+~/fabric-install/fabric-samples/test-network ~/fabric-install/fabric-samples/fabcar
 
 2. Create a channel
 -------------------
@@ -27,11 +27,19 @@ node registerUser.js
 
 5. Start API Backend Server
 ---------------------------
-cd ~/fabric-samples-old/fabcar/javascript/api
-node server.js
+cd ~/fabric-install/fabric-samples/fabcar/fabcar-backend$ node server.js
+
 
 # Expected:
-# ✅ FabCar API is running at http://localhost:4000
+~/fabric-install/fabric-samples/fabcar/fabcar-backend$ node server.js
+🚀 FabCar Server listening at http://localhost:3001
+📋 Health check: http://localhost:3001/api/health
+📚 API info: http://localhost:3001/api
+🚗 Cars endpoint: http://localhost:3001/api/cars
+✅ Car CAR13 created successfully
+✅ Car CAR18 created successfully
+✅ Car CAR13 ownership changed to Bob
+
 
 6. REST API Commands (using curl or Postman)
 --------------------------------------------
@@ -44,19 +52,25 @@ curl -X POST http://localhost:4000/register \
 
 Query all cars:
 ---------------
-curl http://localhost:4000/cars
+curl http://localhost:3001/api/cars
 
-Create a car:
--------------
-curl -X POST http://localhost:4000/createCar \
-  -H "Content-Type: application/json" \
-  -d '{"carId":"CAR10","make":"Subaru","model":"Outback","colour":"silver","owner":"Gregory"}'
+# Query specific car
+.........................
+curl http://localhost:3001/api/cars/CAR0
 
-Change car owner:
------------------
-curl -X POST http://localhost:4000/changeOwner \
+# Add new car
+...........................
+curl -X POST http://localhost:3001/api/cars \
   -H "Content-Type: application/json" \
-  -d '{"carId":"CAR10","newOwner":"Alice"}'
+  -d '{"carId": "CAR13", "make": "Honda", "model": "Civic", "color": "white", "owner": "Gregory"}'
+
+
+# Change ownership
+............................
+curl -X PUT http://localhost:3001/api/cars/CAR13 \
+  -H "Content-Type: application/json" \
+  -d '{"owner": "Bob"}'
+
 
 7. Create Frontend (React + Vite)
 ---------------------------------
