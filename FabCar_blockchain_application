@@ -67,27 +67,28 @@ This command installed:
 
 Verification of Installed Components
 - Peer Binary:
-      ~/fabric-samples-old/fabcar/javascript$ peer version
+      ~/fabric-install/fabric-samples$ peer version
 
   Output:
       peer:
-       Version: 2.2.7
-       Commit SHA: 7f22e997e
-       Go version: go1.18.2
-       OS/Arch: linux/amd64
-       Chaincode:
-        Base Docker Label: org.hyperledger.fabric
-        Docker Namespace: hyperledger
+      Version: 2.4.9
+      Commit SHA: 2a13518
+      Go version: go1.18.10
+      OS/Arch: linux/amd64
+      Chaincode:
+      Base Docker Label: org.hyperledger.fabric
+      Docker Namespace: hyperledger
+
 
 - Orderer Binary:
-      ~/fabric-samples-old/fabcar/javascript$ orderer version
+      ~/fabric-install/fabric-samples/bin$ orderer version
 
   Output:
-      orderer:
-       Version: 2.2.7
-       Commit SHA: 7f22e997e
-       Go version: go1.18.2
-       OS/Arch: linux/amd64
+  orderer:
+  Version: 2.4.9
+  Commit SHA: 2a13518
+  Go version: go1.18.10
+  OS/Arch: linux/amd64
 
 -------------------------------------------------------------
 
