@@ -79,7 +79,6 @@ Verification of Installed Components
       Base Docker Label: org.hyperledger.fabric
       Docker Namespace: hyperledger
 
-
 - Orderer Binary:
       ~/fabric-install/fabric-samples/bin$ orderer version
 
@@ -97,7 +96,7 @@ Verification of Installed Components
 
 The FabCar test network, consisting of two organizations (Org1 and Org2) and an orderer, was launched from the test network directory:
 
-    cd ~/fabric-samples-old/fabcar
+    cd ~/fabric-install/fabric-samples/fabcar
     ./startFabric.sh
 
 Network Startup Output
@@ -129,13 +128,15 @@ Docker Container Details:
 Active Peer Containers
 The active peer containers, including chaincode containers for fabcar_1 and peer nodes for Org1 and Org2, were verified:
 
-    docker ps | grep peer
+    ~/fabric-install/fabric-samples$ docker ps | grep peer
 
 Output:
-    b141e623248c   dev-peer0.org2.example.com-fabcar_1-...   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes   dev-peer0.org2.example.com-fabcar_1-...
-    69a34eedf124   dev-peer0.org1.example.com-fabcar_1-...   "chaincode -peer.add…"   4 minutes ago   Up 4 minutes   dev-peer0.org1.example.com-fabcar_1-...
-    69c57a3047e1   hyperledger/fabric-peer:latest             "peer node start"        6 minutes ago   Up 6 minutes   0.0.0.0:9051->9051/tcp, :::9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, :::9445->9445/tcp   peer0.org2.example.com
-    5af81a06ebf4   hyperledger/fabric-peer:latest             "peer node start"        6 minutes ago   Up 5 minutes   0.0.0.0:7051->7051/tcp, :::7051->7051/tcp, 0.0.0.0:9444->9444/tcp, :::9444->9444/tcp   peer0.org1.example.com
+    
+6b86c0e9a8cf   dev-peer0.org2.example.com-fabcar_1-91c27d42a384c0b27ba84698fb485d8f34c3a1aa7df9a1a89c9a9ac0563467dc-fd0150b470031ace9e256368f0353f7d5ef31d3c7934a61320cc07e1effbbf94   "chaincode -peer.add…"   53 minutes ago   Up 53 minutes                                                                                                                                           dev-peer0.org2.example.com-fabcar_1-91c27d42a384c0b27ba84698fb485d8f34c3a1aa7df9a1a89c9a9ac0563467dc
+dc577b21a7bf   dev-peer0.org1.example.com-fabcar_1-91c27d42a384c0b27ba84698fb485d8f34c3a1aa7df9a1a89c9a9ac0563467dc-d536b1a94ade845d6a839691f6388ba27b8b885f86f71578c4567ea9135c33ce   "chaincode -peer.add…"   53 minutes ago   Up 53 minutes                                                                                                                                           dev-peer0.org1.example.com-fabcar_1-91c27d42a384c0b27ba84698fb485d8f34c3a1aa7df9a1a89c9a9ac0563467dc
+bd5a6780b4ee   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        55 minutes ago   Up 55 minutes   0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp                                      peer0.org2.example.com
+5e75cf77766a   hyperledger/fabric-peer:latest                                                                                                                                          "peer node start"        55 minutes ago   Up 55 minutes   0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp                                                peer0.org1.example.com
+9444/tcp   peer0.org1.example.com
 
 -------------------------------------------------------------
 
@@ -147,7 +148,7 @@ The FabCar application was interacted with using JavaScript scripts to manage id
 4.1 Install Dependencies
 Navigated to the JavaScript directory and installed Node.js dependencies:
 
-    cd ~/fabric-samples-old/fabcar/javascript
+    cd /fabric-install/fabric-samples$/fabcar/javascript
     npm install
 
 4.2 Enroll Admin Identity
@@ -156,7 +157,7 @@ An admin identity was created for the network:
     node enrollAdmin.js
 
 Output:
-    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Wallet path: /home/gregory/f~/fabric-install/fabric-samples$/fabcar/javascript/wallet
     Successfully enrolled admin user "admin" and imported it into the wallet
 
 4.3 Register Application User
@@ -165,7 +166,7 @@ An application user (appUser) was registered and enrolled:
     node registerUser.js
 
 Output:
-    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Wallet path: /home/gregory/f~/fabric-install/fabric-samples$/fabcar/javascript/wallet
     Successfully registered and enrolled admin user "appUser" and imported it into the wallet
 
 -------------------------------------------------------------
@@ -181,7 +182,7 @@ A new car with ID CAR12 was added to the ledger:
     node invoke.js
 
 Output:
-    Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+    Wallet path: /fabric-install/fabric-samples$/fabcar/javascript/wallet
     Transaction has been submitted
 
 5.2 Query All Cars
@@ -190,7 +191,7 @@ The ledger was queried to list all cars, confirming the addition of CAR12:
     node query.js
 
 Output:
-Wallet path: /home/gregory/fabric-samples-old/fabcar/javascript/wallet
+Wallet path: /fabric-install/fabric-samples$/fabcar/javascript/wallet
 Transaction has been evaluated, result is: [
 {"Key":"CAR0","Record":{"make":"Toyota","model":"Prius","colour":"blue","owner":"Tomoko"}},
 {"Key":"CAR1","Record":{"make":"Ford","model":"Mustang","colour":"red","owner":"Brad"}},
