@@ -1,14 +1,3 @@
-Program:	MSc. Cybersecurity and Digital Forensic
-Course Name:	Blockchain Technology
-Course Code: 	COG 09212 
-Lecturer:	Dr. Isakwisa Tende
-Assignment:	Build a FabCar blockchain application using Node.js and JavaScript on top of the first-network (test-network) 
-            in Hyperledger Fabric for changing ownership of cars.
-Participants:	
-Gabriel C. Simeo - 24026485811
-Rosemary Masinde - 24026473346
-Gregory  Aloyce  - 24026451607
-Juma Ismail - 	24026415701
 ###############################################################################################################################################################
 
 This report outlines the setup, configuration and execution of the Hyperledger Fabric FabCar network on an Ubuntu 24.04.2 system. The process includes installing prerequisites, setting up the Fabric environment, launching the test network, and interacting with the FabCar application using JavaScript for asset management.
